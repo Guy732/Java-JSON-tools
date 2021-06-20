@@ -13,12 +13,6 @@ public enum JSONSynthaxError
 			"Expected '[', '{', '\"', 'null', 'false', 'true' or number for a value"),
 
 	/**
-	 * Describes an invalid document, where the the last <tt>}</tt> or <tt>]</tt> is
-	 * followed by further non-whitespace characters.
-	 */
-	INVALID_DOCUMENT_END("Invalid document end", "Expected EOF"),
-
-	/**
 	 * Describes an invalid JSON array, where the initial <tt>[</tt> isn't followed
 	 * by a JSON value or a <tt>]</tt>.
 	 */
@@ -113,7 +107,7 @@ public enum JSONSynthaxError
 	 * Describe a String having control characters within.
 	 */
 	STRING_CONTAIN_CONTROL_CHAR("Invalid string, has control character",
-			"A String cannot contain control character, use escape sequence instead.");
+			"A String cannot contain control characters, use escape sequence instead.");
 
 	private final String description;
 

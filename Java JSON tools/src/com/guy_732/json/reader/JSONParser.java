@@ -28,7 +28,7 @@ public class JSONParser implements Closeable
 
 	private final StringBuilder local_builder = new StringBuilder();
 
-	private Context ctx;
+	private boolean closed = false;
 
 	/**
 	 * Construct a new {@link JSONParser}
@@ -47,8 +47,6 @@ public class JSONParser implements Closeable
 		}
 
 		this.reader = reader;
-
-		ctx = Context.BEGIN;
 	}
 
 	/**
@@ -95,25 +93,6 @@ public class JSONParser implements Closeable
 	public JSONParser(char[] value) throws NullPointerException
 	{
 		this(new StringJSONReader(value));
-	}
-
-	/**
-	 * 
-	 * @throws IOException          Thrown by
-	 *                              {@link JSONReader#nextNonWhitespace(JSONSynthaxError)
-	 *                              JSONReader::nextNonWhitespace(JSONSynthaxError)}
-	 * @throws JSONSynthaxException Thrown by
-	 *                              {@link JSONReader#nextNonWhitespace(JSONSynthaxError)
-	 *                              JSONReader::nextNonWhitespace(JSONSynthaxError)}
-	 *                              With
-	 *                              {@link JSONSynthaxError#INVALID_DOCUMENT_START
-	 *                              JSONSynthaxError::INVALID_DOCUMENT_START}
-	 */
-	private JSONValue parseBegin() throws JSONSynthaxException, IOException
-	{
-		ctx = Context.END;
-		char c = reader.nextNonWhitespace(JSONSynthaxError.INVALID_DOCUMENT_START);
-		return parseNextValue(c);
 	}
 
 	private JSONValue parseNextValue(char c) throws JSONSynthaxException, IOException
@@ -323,7 +302,6 @@ public class JSONParser implements Closeable
 			return '\t';
 
 		case 'u':
-			// ... here we go
 			if (!reader.makeAvailable(4))
 			{
 				throw new JSONSynthaxException(JSONSynthaxError.UNFINISHED_UNICODE_ESCAPE_SEQUENCE);
@@ -411,41 +389,36 @@ public class JSONParser implements Closeable
 	@Override
 	public void close() throws IOException
 	{
-		if (ctx != Context.CLOSED)
+		if (!closed)
 		{
-			ctx = Context.CLOSED;
-
+			closed = true;
 			reader.close();
 		}
 	}
 
-	public JSONValue parse() throws JSONSynthaxException, IOException
+	/**
+	 * Parse the JSON data
+	 * 
+	 * Subsequent calls will try to read the value following the previous one in the
+	 * {@link JSONReader}
+	 * 
+	 * @return The JSONValue parsed
+	 * 
+	 * @throws JSONSynthaxException  if the JSON data is not valid
+	 * @throws IOException           I/O error occurred (won't happen with
+	 *                               {@link StringJSONReader})
+	 * @throws IllegalStateException Thrown if the {@link JSONParser} is closed
+	 * 
+	 * @see JSONParser#close() JSONParser::close()
+	 */
+	public JSONValue parse() throws JSONSynthaxException, IOException, IllegalStateException
 	{
-		JSONValue v = null;
-
-		switch (ctx)
+		if (closed)
 		{
-		case BEGIN:
-			v = parseBegin();
-			break;
-
-		case END:
-			throw new IllegalStateException("Cannot call nextState() when JSONParser already parsed");
-		case CLOSED:
-			throw new IllegalStateException("Cannot call nextState() when JSONParser is closed");
-		default:
-			throw new IllegalStateException("State of the JSONParser has an unknown value");
+			throw new IllegalStateException("Cannot call member 'parse()' when the JSONParser is closed");
 		}
 
-		try
-		{
-			reader.nextNonWhitespace(JSONSynthaxError.INVALID_DOCUMENT_END);
-		}
-		catch (JSONSynthaxException e)
-		{
-			return v;
-		}
-
-		throw new JSONSynthaxException(JSONSynthaxError.INVALID_DOCUMENT_END);
+		char c = reader.nextNonWhitespace(JSONSynthaxError.INVALID_DOCUMENT_START);
+		return parseNextValue(c);
 	}
 }
