@@ -2,24 +2,28 @@ package com.guy_732.json.exception;
 
 import com.guy_732.json.reader.JSONSynthaxError;
 
+/**
+ * Class thrown when a Parser cannot parse due to unknown Synthax
+ * 
+ * @author Guy_732
+ */
 public class JSONSynthaxException extends JSONException
 {
 	private static final long serialVersionUID = -5679459782582941908L;
-	
+
 	private final JSONSynthaxError error;
-	
+
 	/**
 	 * Creates a new {@link JSONSynthaxError} for the given components.
 	 * 
-	 * @param error
-	 *            The syntax error.
+	 * @param error The syntax error.
 	 */
 	public JSONSynthaxException(JSONSynthaxError error)
 	{
 		super(error.getDescription());
 		this.error = error;
 	}
-	
+
 	@Override
 	public String getMessage()
 	{
@@ -27,7 +31,7 @@ public class JSONSynthaxException extends JSONException
 		s.append(" (");
 		s.append(error.getExpectation());
 		s.append(')');
-		
+
 		return s.toString();
 	}
 }

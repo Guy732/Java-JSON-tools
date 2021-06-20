@@ -7,7 +7,8 @@ import com.guy_732.json.exception.JSONException;
  * 
  * @author Guy_732
  */
-public class JSONRecursiveObject extends JSONException {
+public class JSONRecursiveObject extends JSONException
+{
 
 	private static final long serialVersionUID = 6513100252562741167L;
 

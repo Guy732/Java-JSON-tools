@@ -8,7 +8,7 @@ package com.guy_732.json;
 public final class JSONString extends JSONValue
 {
 	private String value;
-	
+
 	/**
 	 * Create a new JSONString storing an empty String.
 	 */
@@ -16,7 +16,7 @@ public final class JSONString extends JSONValue
 	{
 		this("");
 	}
-	
+
 	/**
 	 * Create a new JSONString storing a given String
 	 * 
@@ -31,16 +31,16 @@ public final class JSONString extends JSONValue
 		{
 			throw new NullPointerException("'value' cannot be null.");
 		}
-		
+
 		this.value = value;
 	}
-	
+
 	@Override
 	public JSONType type()
 	{
 		return JSONType.JSONString;
 	}
-	
+
 	/**
 	 * Getter
 	 * 
@@ -50,7 +50,7 @@ public final class JSONString extends JSONValue
 	{
 		return value;
 	}
-	
+
 	/**
 	 * Setter
 	 * 
@@ -64,10 +64,10 @@ public final class JSONString extends JSONValue
 		{
 			throw new NullPointerException("'newVal' cannot be null.");
 		}
-		
+
 		value = newVal;
 	}
-	
+
 	/**
 	 * Same as {@link JSONString#getString() JSONString::getString()}
 	 */

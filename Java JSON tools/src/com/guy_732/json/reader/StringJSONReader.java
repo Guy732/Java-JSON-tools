@@ -2,6 +2,11 @@ package com.guy_732.json.reader;
 
 import java.io.IOException;
 
+/**
+ * Reading JSON data from a Java {@link String}
+ * 
+ * @author Guy_732
+ */
 public class StringJSONReader extends JSONReader
 {
 	private final String buffer;
@@ -16,15 +21,15 @@ public class StringJSONReader extends JSONReader
 	public StringJSONReader(String s) throws NullPointerException
 	{
 		super();
-		
+
 		if (s == null)
 		{
 			throw new NullPointerException("'s' cannot be null");
 		}
-		
+
 		buffer = s;
 	}
-	
+
 	/**
 	 * Create a new JSONReader relying on a String
 	 * 
@@ -38,10 +43,12 @@ public class StringJSONReader extends JSONReader
 
 	@Override
 	public void close() throws IOException
-	{}
+	{
+	}
 
 	@Override
-	public boolean makeAvailable(int minimum) throws IOException {
+	public boolean makeAvailable(int minimum) throws IOException
+	{
 		return buffer.length() - position >= minimum;
 	}
 

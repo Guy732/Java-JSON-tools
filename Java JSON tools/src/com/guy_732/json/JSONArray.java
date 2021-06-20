@@ -3,16 +3,20 @@ package com.guy_732.json;
 import java.util.ArrayList;
 
 /**
- * Represent an Array
- * To perform any add/remove actions on the array, do it on the ArrayList returned by {@link JSONArray#getArray() JsonArray::getArray()}
- * Do not add null into the ArrayList, add {@link JSONNull#Null JSONNull::Null} instead.
+ * Represent an Array.
+ * 
+ * To perform any add/remove actions on the array, do it on the ArrayList
+ * returned by {@link JSONArray#getArray() JsonArray::getArray()}.
+ * 
+ * Do not add null into the ArrayList, add {@link JSONNull#Null JSONNull::Null}
+ * instead.
  * 
  * @author Guy_732
  */
 public final class JSONArray extends JSONValue
 {
 	private final ArrayList<JSONValue> array;
-	
+
 	/**
 	 * Create a new empty JSONArray
 	 */
@@ -20,7 +24,7 @@ public final class JSONArray extends JSONValue
 	{
 		this(null);
 	}
-	
+
 	/**
 	 * Create a new JSONArray from a given array
 	 * 
@@ -35,12 +39,12 @@ public final class JSONArray extends JSONValue
 		{
 			array = new ArrayList<>();
 		}
-		
+
 		if (array.contains(null))
 		{
 			new NullPointerException("JSONArray cannot contain null.");
 		}
-		
+
 		this.array = array;
 	}
 
@@ -49,7 +53,7 @@ public final class JSONArray extends JSONValue
 	{
 		return JSONType.JSONArray;
 	}
-	
+
 	/**
 	 * Getter
 	 * 
@@ -59,7 +63,7 @@ public final class JSONArray extends JSONValue
 	{
 		return array;
 	}
-	
+
 	/**
 	 * Check
 	 * 

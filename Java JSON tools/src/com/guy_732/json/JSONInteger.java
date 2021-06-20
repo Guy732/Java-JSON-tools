@@ -1,14 +1,15 @@
 package com.guy_732.json;
 
 /**
- * Represent a long (NOT floating point number, see {@link JSONNumber} for those)
+ * Represent a long (NOT floating point number, see {@link JSONNumber} for
+ * those)
  * 
  * @author Guy_732
  */
 public final class JSONInteger extends JSONValue
 {
 	private long value;
-	
+
 	/**
 	 * Construct a new JSONInteger storing 0
 	 */
@@ -16,7 +17,7 @@ public final class JSONInteger extends JSONValue
 	{
 		this(0);
 	}
-	
+
 	/**
 	 * Create a new JSONInteger storing a given value.
 	 * 
@@ -25,7 +26,7 @@ public final class JSONInteger extends JSONValue
 	public JSONInteger(long value)
 	{
 		super();
-		
+
 		this.value = value;
 	}
 
@@ -34,7 +35,7 @@ public final class JSONInteger extends JSONValue
 	{
 		return JSONType.JSONInteger;
 	}
-	
+
 	/**
 	 * Getter
 	 * 
@@ -44,7 +45,7 @@ public final class JSONInteger extends JSONValue
 	{
 		return value;
 	}
-	
+
 	/**
 	 * Setter
 	 * 

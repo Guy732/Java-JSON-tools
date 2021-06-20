@@ -1,12 +1,19 @@
 package com.guy_732.json.writer;
 
 import com.guy_732.json.JSONType;
+import com.guy_732.json.JSONValue;
 import com.guy_732.json.exception.JSONException;
 
+/**
+ * Should never be thrown, but if {@link JSONValue#type() JSONValue::type()}
+ * somehow return an unknown type, it will be thrown
+ * 
+ * @author Guy_732
+ */
 public class JSONUnknownType extends JSONException
 {
 	private static final long serialVersionUID = 7270320068228436883L;
-	
+
 	private final JSONType type;
 
 	public JSONUnknownType()
@@ -37,24 +44,24 @@ public class JSONUnknownType extends JSONException
 		super(message, cause, enableSuppression, writableStackTrace);
 		type = null;
 	}
-	
+
 	public JSONUnknownType(JSONType type)
 	{
 		this.type = type;
 	}
-	
+
 	public String getMessage()
 	{
 		if (type == null)
 		{
 			return super.getMessage();
 		}
-		
+
 		StringBuilder msg = new StringBuilder();
 		msg.append("Unknown JSONType '");
 		msg.append(type.name());
 		msg.append("'");
 		return msg.toString();
 	}
-	
+
 }

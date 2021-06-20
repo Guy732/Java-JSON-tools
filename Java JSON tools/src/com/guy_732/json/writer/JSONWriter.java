@@ -19,11 +19,18 @@ import com.guy_732.json.JSONString;
 import com.guy_732.json.JSONType;
 import com.guy_732.json.JSONValue;
 
+/**
+ * With this class, you can write JSON data to a writer by calling the method
+ * {@link JSONWriter#writeJSONValue(JSONValue)
+ * JSONWriter::writeJSONValue(JSONValue)}
+ * 
+ * @author Guy_732
+ */
 public class JSONWriter implements Closeable
 {
 	private final BufferedWriter writer;
 	private final ArrayDeque<JSONValue> stack = new ArrayDeque<>();
-	
+
 	/**
 	 * Construct a new {@link JSONWriter}
 	 * 
@@ -35,7 +42,7 @@ public class JSONWriter implements Closeable
 	{
 		this(new BufferedWriter(writer));
 	}
-	
+
 	/**
 	 * Construct a new {@link JSONWriter}
 	 * 
@@ -49,10 +56,10 @@ public class JSONWriter implements Closeable
 		{
 			throw new NullPointerException("'writer' cannot be null");
 		}
-		
+
 		this.writer = writer;
 	}
-	
+
 	/**
 	 * Construct a new {@link JSONWriter}
 	 * 
@@ -64,15 +71,16 @@ public class JSONWriter implements Closeable
 	{
 		this(new BufferedWriter(new OutputStreamWriter(stream)));
 	}
-	
+
 	/**
 	 * write the JSONValue to the connected {@link BufferedWriter}
 	 * 
 	 * @param val The value to write
 	 * 
-	 * @throws NullPointerException if val is null OR a JSONValue's type() method returned null
-	 * @throws IOException thrown by {@link BufferedWriter}
-	 * @throws JSONRecursiveObject if a value contains itself
+	 * @throws NullPointerException if val is null OR a JSONValue's type() method
+	 *                              returned null
+	 * @throws IOException          thrown by {@link BufferedWriter}
+	 * @throws JSONRecursiveObject  if a value contains itself
 	 */
 	public void writeJSONValue(JSONValue val) throws NullPointerException, IOException, JSONRecursiveObject
 	{
@@ -80,11 +88,11 @@ public class JSONWriter implements Closeable
 		{
 			throw new NullPointerException("'val' cannot be null");
 		}
-		
+
 		writeValue(val);
 		writer.flush();
 	}
-	
+
 	private void writeValue(JSONValue v) throws NullPointerException, IOException, JSONRecursiveObject
 	{
 		JSONType t = v.type();
@@ -94,7 +102,7 @@ public class JSONWriter implements Closeable
 			assert v instanceof JSONNull : "type() returned JSONNull but the value isn't a JSONnull object";
 			writer.write("null");
 			break;
-			
+
 		case JSONBoolean:
 			assert v instanceof JSONBoolean : "type() returned JSONBoolean but the value isn't a JSONBoolean object";
 			JSONBoolean b = (JSONBoolean) v;
@@ -106,46 +114,46 @@ public class JSONWriter implements Closeable
 			{
 				writer.write("false");
 			}
-			
+
 			break;
-			
+
 		case JSONInteger:
 			assert v instanceof JSONInteger : "type() returned JSONInteger but the value isn't a JSONInteger object";
 			JSONInteger i = (JSONInteger) v;
 			writer.write(Long.toString(i.getValue()));
 			break;
-			
+
 		case JSONNumber:
 			assert v instanceof JSONNumber : "type() returned JSONNumber but the value isn't a JSONNumber object";
 			JSONNumber d = (JSONNumber) v;
 			writer.write(Double.toString(d.getValue()));
 			break;
-			
+
 		case JSONString:
 			assert v instanceof JSONString : "type() returned JSONString but the value isn't a JSONString object";
 			JSONString s = (JSONString) v;
 			writeString(s.getString());
 			break;
-			
+
 		case JSONArray:
 			assert v instanceof JSONArray : "type() returned JSONArray but the value isn't a JSONArray object";
 			writeArray((JSONArray) v);
 			break;
-			
+
 		case JSONObject:
 			assert v instanceof JSONObject : "type() returned JSONObject but the value isn't a JSONObject object";
 			writeObject((JSONObject) v);
 			break;
-			
+
 		default:
 			throw new JSONUnknownType(t);
 		}
 	}
-	
+
 	private void writeString(String s) throws IOException
 	{
 		writer.write('"');
-		
+
 		for (int i = 0, max = s.length(); i < max; ++i)
 		{
 			char c = s.charAt(i);
@@ -154,62 +162,62 @@ public class JSONWriter implements Closeable
 			case '"':
 				writer.write("\\\""); // >> \"
 				break;
-				
+
 			case '\\':
 				writer.write("\\\\"); // >> \\
 				break;
-				
+
 			case '\n':
 				writer.write("\\n");
 				break;
-				
+
 			case '\r':
 				writer.write("\\r");
 				break;
-				
+
 			case '\b':
 				writer.write("\\b");
 				break;
-				
+
 			case '\f':
 				writer.write("\\f");
 				break;
-				
+
 			case '\t':
 				writer.write("\\t");
 				break;
-				
+
 			default:
 				if (!Character.isISOControl(c))
 				{
 					writer.write(c);
 					break;
 				}
-				
+
 				writer.write("\\u");
 				String hex = Integer.toHexString(c);
 				while (hex.length() < 4)
 				{
 					hex = '0' + hex;
 				}
-				
+
 				writer.write(hex);
 				break;
 			}
 		}
-		
+
 		writer.write('"');
 	}
-	
+
 	private void writeObject(JSONObject ob) throws IOException, JSONRecursiveObject
 	{
 		if (stack.contains(ob))
 		{
 			throw new JSONRecursiveObject("A JSONObject contains itself");
 		}
-		
+
 		stack.push(ob);
-		
+
 		writer.write('{');
 		boolean is_first = true;
 		for (Entry<String, JSONValue> v : ob.getMap().entrySet())
@@ -222,29 +230,30 @@ public class JSONWriter implements Closeable
 			{
 				is_first = false;
 			}
-			
+
 			writeString(v.getKey());
 			writer.write(':');
 			writeValue(v.getValue());
 		}
-		
+
 		writer.write('}');
-		
+
 		if (stack.pop() != ob)
 		{
-			throw new InternalError("The popped value from the stack AFTER writing the content of the object wasn't the object written");
+			throw new InternalError(
+					"The popped value from the stack AFTER writing the content of the object wasn't the object written");
 		}
 	}
-	
+
 	private void writeArray(JSONArray arr) throws IOException, JSONRecursiveObject
 	{
 		if (stack.contains(arr))
 		{
 			throw new JSONRecursiveObject("A JSONArray contains itself");
 		}
-		
+
 		stack.push(arr);
-		
+
 		writer.write('[');
 		boolean is_first = true;
 		for (JSONValue v : arr.getArray())
@@ -257,15 +266,16 @@ public class JSONWriter implements Closeable
 			{
 				is_first = false;
 			}
-			
+
 			writeValue(v);
 		}
-		
+
 		writer.write(']');
-		
+
 		if (stack.pop() != arr)
 		{
-			throw new InternalError("The popped value from the stack AFTER writing the content of the array wasn't the array written");
+			throw new InternalError(
+					"The popped value from the stack AFTER writing the content of the array wasn't the array written");
 		}
 	}
 

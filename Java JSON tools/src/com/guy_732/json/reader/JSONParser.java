@@ -16,14 +16,20 @@ import com.guy_732.json.JSONString;
 import com.guy_732.json.JSONValue;
 import com.guy_732.json.exception.JSONSynthaxException;
 
+/**
+ * This class parse JSON data with the method {@link JSONParser#parse()
+ * JSONParser::parse()} and returns a {@link JSONValue}
+ * 
+ * @author Guy_732
+ */
 public class JSONParser implements Closeable
 {
 	private final JSONReader reader;
-	
+
 	private final StringBuilder local_builder = new StringBuilder();
-	
+
 	private Context ctx;
-	
+
 	/**
 	 * Construct a new {@link JSONParser}
 	 * 
@@ -34,17 +40,17 @@ public class JSONParser implements Closeable
 	public JSONParser(JSONReader reader) throws NullPointerException
 	{
 		super();
-		
+
 		if (reader == null)
 		{
 			throw new NullPointerException("'reader' cannot be null");
 		}
-		
+
 		this.reader = reader;
-		
+
 		ctx = Context.BEGIN;
 	}
-	
+
 	/**
 	 * Construct a new {@link JSONParser}
 	 * 
@@ -56,19 +62,19 @@ public class JSONParser implements Closeable
 	{
 		this(new ReaderJSONReader(reader));
 	}
-	
+
 	/**
 	 * Construct a new {@link JSONParser}
 	 * 
 	 * @param stream The stream to read from
 	 * 
-	 * @throws NullPointerException if stream  is null
+	 * @throws NullPointerException if stream is null
 	 */
 	public JSONParser(InputStream stream) throws NullPointerException
 	{
 		this(new ReaderJSONReader(stream));
 	}
-	
+
 	/**
 	 * Creates a new {@link JSONParser}
 	 * 
@@ -79,7 +85,7 @@ public class JSONParser implements Closeable
 	{
 		this(new StringJSONReader(s));
 	}
-	
+
 	/**
 	 * Creates a new {@link JSONParser}
 	 * 
@@ -90,13 +96,18 @@ public class JSONParser implements Closeable
 	{
 		this(new StringJSONReader(value));
 	}
-	
+
 	/**
-	 * When stack is BEGIN
-	 * @throws IOException Thrown by {@link JSONReader#nextNonWhitespace(JSONSynthaxError) JSONReader::nextNonWhitespace(JSONSynthaxError)}
-	 * @throws JSONSynthaxException
-	 * 			Thrown by {@link JSONReader#nextNonWhitespace(JSONSynthaxError) JSONReader::nextNonWhitespace(JSONSynthaxError)}
-	 * 			With {@link JSONSynthaxError#INVALID_DOCUMENT_START JSONSynthaxError::INVALID_DOCUMENT_START}
+	 * 
+	 * @throws IOException          Thrown by
+	 *                              {@link JSONReader#nextNonWhitespace(JSONSynthaxError)
+	 *                              JSONReader::nextNonWhitespace(JSONSynthaxError)}
+	 * @throws JSONSynthaxException Thrown by
+	 *                              {@link JSONReader#nextNonWhitespace(JSONSynthaxError)
+	 *                              JSONReader::nextNonWhitespace(JSONSynthaxError)}
+	 *                              With
+	 *                              {@link JSONSynthaxError#INVALID_DOCUMENT_START
+	 *                              JSONSynthaxError::INVALID_DOCUMENT_START}
 	 */
 	private JSONValue parseBegin() throws JSONSynthaxException, IOException
 	{
@@ -104,34 +115,34 @@ public class JSONParser implements Closeable
 		char c = reader.nextNonWhitespace(JSONSynthaxError.INVALID_DOCUMENT_START);
 		return parseNextValue(c);
 	}
-	
+
 	private JSONValue parseNextValue(char c) throws JSONSynthaxException, IOException
 	{
 		switch (c)
 		{
 		case '{':
 			return parseObject();
-		
+
 		case '[':
 			return parseArray();
-			
+
 		case '"':
 			return parseNextString();
-		
+
 		default:
 			return parseNextLiteral(c);
-			
+
 		}
 	}
-	
+
 	private JSONArray parseArray() throws JSONSynthaxException, IOException
 	{
 		ArrayList<JSONValue> array = new ArrayList<>();
 		boolean array_end = false;
 		boolean is_empty = true;
-		
+
 		JSONSynthaxError err = JSONSynthaxError.INVALID_ARRAY_FIRST;
-		
+
 		while (!array_end)
 		{
 			char c = reader.nextNonWhitespace(err);
@@ -141,42 +152,42 @@ public class JSONParser implements Closeable
 				{
 					throw new JSONSynthaxException(err);
 				}
-				
+
 				array_end = true;
 				continue;
 			}
-			
+
 			is_empty = false;
 			err = JSONSynthaxError.INVALID_ARRAY_VALUE;
-			
+
 			array.add(parseNextValue(c));
-			
+
 			c = reader.nextNonWhitespace(JSONSynthaxError.INVALID_ARRAY_FOLLOW);
 			if (c == ',')
 			{
 				continue;
 			}
-			
+
 			if (c == ']')
 			{
 				array_end = true;
 				continue;
 			}
-			
+
 			throw new JSONSynthaxException(JSONSynthaxError.INVALID_ARRAY_FOLLOW);
 		}
-		
+
 		return new JSONArray(array);
 	}
-	
+
 	private JSONObject parseObject() throws JSONSynthaxException, IOException
 	{
 		JSONObject ob = new JSONObject();
 		boolean object_end = false;
 		boolean is_empty = true;
-		
+
 		JSONSynthaxError err = JSONSynthaxError.INVALID_OBJECT_FIRST;
-		
+
 		while (!object_end)
 		{
 			char c = reader.nextNonWhitespace(err);
@@ -186,11 +197,11 @@ public class JSONParser implements Closeable
 				{
 					throw new JSONSynthaxException(err);
 				}
-				
+
 				object_end = true;
 				continue;
 			}
-			
+
 			if (c == '"')
 			{
 				is_empty = false;
@@ -201,40 +212,40 @@ public class JSONParser implements Closeable
 				{
 					throw new JSONSynthaxException(JSONSynthaxError.INVALID_OBJECT_SEPARATION);
 				}
-				
+
 				c2 = reader.nextNonWhitespace(JSONSynthaxError.INVALID_OBJECT_VALUE);
-				
+
 				if (!ob.addValue(name, parseNextValue(c2)))
 				{
 					throw new JSONSynthaxException(JSONSynthaxError.DUPLICATE_NAME);
 				}
-				
+
 				c2 = reader.nextNonWhitespace(JSONSynthaxError.INVALID_OBJECT_FOLLOW);
 				if (c2 == ',')
 				{
 					continue;
 				}
-				
+
 				if (c2 == '}')
 				{
 					object_end = true;
 					continue;
 				}
-				
+
 				throw new JSONSynthaxException(JSONSynthaxError.INVALID_OBJECT_FOLLOW);
 			}
-			
+
 			throw new JSONSynthaxException(err);
 		}
-		
+
 		return ob;
 	}
-	
+
 	private JSONString parseNextString() throws JSONSynthaxException, IOException
 	{
 		return new JSONString(readNextString(JSONSynthaxError.UNTERMINATED_STRING));
 	}
-	
+
 	private String readNextString(JSONSynthaxError err) throws IOException, JSONSynthaxException
 	{
 		local_builder.setLength(0); // empty the builder
@@ -251,7 +262,7 @@ public class JSONParser implements Closeable
 					reader.nextCharacter(); // advance onto '"'
 					return local_builder.toString();
 				}
-				
+
 				if (nextChar == '\\')
 				{
 					reader.appendNextString(local_builder, offset);
@@ -260,63 +271,64 @@ public class JSONParser implements Closeable
 					offset = -1;
 					break;
 				}
-				
+
 				if (Character.isISOControl(nextChar))
 				{
 					throw new JSONSynthaxException(JSONSynthaxError.STRING_CONTAIN_CONTROL_CHAR);
 				}
-				
+
 				++offset;
 			}
-			
+
 			if (offset != -1) // we read all available characters
 			{
 				reader.appendNextString(local_builder, offset);
 			}
 		}
-		
+
 		throw new JSONSynthaxException(err);
 	}
-	
+
 	private char readEscaped() throws IOException, JSONSynthaxException
 	{
 		if (!reader.makeAvailable(1))
 		{
 			throw new JSONSynthaxException(JSONSynthaxError.UNFINISHED_ESCAPE_SEQUENCE);
 		}
-		
-		switch (reader.nextCharacter()) {
+
+		switch (reader.nextCharacter())
+		{
 		case '/':
 			return '/';
-		
+
 		case '\\':
 			return '\\';
-			
+
 		case '"':
 			return '"';
-			
+
 		case 'b':
 			return '\b';
-			
+
 		case 'f':
 			return '\f';
-			
+
 		case 'n':
 			return '\n';
-			
+
 		case 'r':
 			return '\r';
-			
+
 		case 't':
 			return '\t';
-			
+
 		case 'u':
 			// ... here we go
 			if (!reader.makeAvailable(4))
 			{
 				throw new JSONSynthaxException(JSONSynthaxError.UNFINISHED_UNICODE_ESCAPE_SEQUENCE);
 			}
-			
+
 			String hex = reader.nextString(4);
 			try
 			{
@@ -328,7 +340,7 @@ public class JSONParser implements Closeable
 				{
 					throw new JSONSynthaxException(JSONSynthaxError.UNFINISHED_UNICODE_ESCAPE_SEQUENCE);
 				}
-				
+
 				throw new JSONSynthaxException(JSONSynthaxError.INVALID_UNICODE_ESCAPE_SEQUENCE);
 			}
 
@@ -336,7 +348,7 @@ public class JSONParser implements Closeable
 			throw new JSONSynthaxException(JSONSynthaxError.INVALID_ESCAPE_SEQUENCE);
 		}
 	}
-	
+
 	private JSONValue parseNextLiteral(char c) throws IOException, JSONSynthaxException
 	{
 		local_builder.setLength(0);
@@ -348,13 +360,13 @@ public class JSONParser implements Closeable
 			{
 				return decodeLiteral(local_builder.toString());
 			}
-			
+
 			local_builder.append(reader.nextCharacter());
 		}
-		
+
 		return decodeLiteral(local_builder.toString());
 	}
-	
+
 	/**
 	 * Decode the literal
 	 * 
@@ -402,15 +414,15 @@ public class JSONParser implements Closeable
 		if (ctx != Context.CLOSED)
 		{
 			ctx = Context.CLOSED;
-			
+
 			reader.close();
 		}
 	}
-	
+
 	public JSONValue parse() throws JSONSynthaxException, IOException
 	{
 		JSONValue v = null;
-		
+
 		switch (ctx)
 		{
 		case BEGIN:
@@ -424,7 +436,7 @@ public class JSONParser implements Closeable
 		default:
 			throw new IllegalStateException("State of the JSONParser has an unknown value");
 		}
-		
+
 		try
 		{
 			reader.nextNonWhitespace(JSONSynthaxError.INVALID_DOCUMENT_END);
@@ -433,7 +445,7 @@ public class JSONParser implements Closeable
 		{
 			return v;
 		}
-		
+
 		throw new JSONSynthaxException(JSONSynthaxError.INVALID_DOCUMENT_END);
 	}
 }

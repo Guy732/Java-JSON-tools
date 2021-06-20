@@ -3,11 +3,12 @@ package com.guy_732.json;
 /**
  * Represent a null in java.
  * 
- * Only 1 instance: {@link JSONNull#Null JSONNull::Null} will be used as the constructor is private.
+ * Only 1 instance: {@link JSONNull#Null JSONNull::Null} will be used as the
+ * constructor is private.
  * 
  * @author Guy_732
  */
-public final class JSONNull extends JSONValue 
+public final class JSONNull extends JSONValue
 {
 	/**
 	 * The only instance of {@link JSONNull}
@@ -20,7 +21,7 @@ public final class JSONNull extends JSONValue
 	}
 
 	@Override
-	public JSONType type() 
+	public JSONType type()
 	{
 		return JSONType.JSONNull;
 	}

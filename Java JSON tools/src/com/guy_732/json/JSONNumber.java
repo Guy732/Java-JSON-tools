@@ -1,14 +1,15 @@
 package com.guy_732.json;
 
 /**
- * Represent a double (floating point values, for integers see {@link JSONInteger})
+ * Represent a double (floating point values, for integers see
+ * {@link JSONInteger})
  * 
  * @author Guy_732
  */
 public final class JSONNumber extends JSONValue
 {
 	private double value;
-	
+
 	/**
 	 * Create a new JSONNumber storing 0.0
 	 */
@@ -16,7 +17,7 @@ public final class JSONNumber extends JSONValue
 	{
 		this(0);
 	}
-	
+
 	/**
 	 * Create a new JSONNumber storing a given value.
 	 * 
@@ -25,7 +26,7 @@ public final class JSONNumber extends JSONValue
 	public JSONNumber(double value)
 	{
 		super();
-		
+
 		this.value = value;
 	}
 
@@ -34,7 +35,7 @@ public final class JSONNumber extends JSONValue
 	{
 		return JSONType.JSONNumber;
 	}
-	
+
 	/**
 	 * Getter
 	 * 
@@ -44,7 +45,7 @@ public final class JSONNumber extends JSONValue
 	{
 		return value;
 	}
-	
+
 	/**
 	 * Setter
 	 * 

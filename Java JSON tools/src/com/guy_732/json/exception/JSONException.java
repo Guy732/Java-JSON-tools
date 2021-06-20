@@ -1,5 +1,10 @@
 package com.guy_732.json.exception;
 
+/**
+ * Base class for all errors involving JSON
+ * 
+ * @author Guy_732
+ */
 public class JSONException extends RuntimeException
 {
 	private static final long serialVersionUID = -2802262093645047750L;

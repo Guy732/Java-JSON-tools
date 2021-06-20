@@ -3,25 +3,25 @@ package com.guy_732.json;
 /**
  * Represent a boolean
  * 
- * Only 2 instances: {@link JSONBoolean#True JSONBoolean::True} & {@link JSONBoolean#False JSONBoolean::False}
+ * Only 2 instances: {@link JSONBoolean#True JSONBoolean::True} &
+ * {@link JSONBoolean#False JSONBoolean::False}
  * 
  * @author Guy_732
  */
-public class JSONBoolean extends JSONValue
+public final class JSONBoolean extends JSONValue
 {
 	/**
 	 * One of the 2 instances, represent true.
 	 */
 	public static final JSONBoolean True = new JSONBoolean(true);
-	
+
 	/**
 	 * One of the 2 instances, represent false.
 	 */
 	public static final JSONBoolean False = new JSONBoolean(false);
-	
-	
+
 	private final boolean value;
-	
+
 	/**
 	 * Create a new JSONBoolean storing a given boolean
 	 * 
@@ -30,7 +30,7 @@ public class JSONBoolean extends JSONValue
 	private JSONBoolean(boolean value)
 	{
 		super();
-		
+
 		this.value = value;
 	}
 
@@ -39,7 +39,7 @@ public class JSONBoolean extends JSONValue
 	{
 		return JSONType.JSONBoolean;
 	}
-	
+
 	/**
 	 * Getter
 	 * 
