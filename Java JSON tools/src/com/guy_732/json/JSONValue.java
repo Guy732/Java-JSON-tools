@@ -34,4 +34,89 @@ public abstract class JSONValue
 	{
 		return this == ob;
 	}
+
+	/**
+	 * Method overriden by {@link JSONInteger} and returning it's value, the method
+	 * throw an {@link IllegalArgumentException} if it isn't overriden (not a
+	 * {@link JSONInteger})
+	 * 
+	 * @param name An optional name to throw with the exception message
+	 * @return the value of the {@link JSONInteger}, no return otherwise
+	 */
+	public long getInteger(String name)
+	{
+		name = (name != null ? name : "value");
+		throw new IllegalArgumentException(name.concat(" wasn't a JSONInteger"));
+	}
+
+	/**
+	 * Method overriden by {@link JSONInteger} and {@link JSONNumber} and returning
+	 * it's value, the method throw an {@link IllegalArgumentException} if it isn't
+	 * overriden (not a {@link JSONInteger} nor {@link JSONNumber}
+	 * 
+	 * @param name An optional name to throw with the exception message
+	 * @return the value of the {@link JSONInteger} or {@link JSONNumber} no return
+	 *         otherwise
+	 */
+	public double getNumber(String name)
+	{
+		name = (name != null ? name : "value");
+		throw new IllegalArgumentException(name.concat(" was not a JSONInteger nor a JSONNumber"));
+	}
+
+	/**
+	 * Method overriden by {@link JSONString} and returning it's value, the method
+	 * throw an {@link IllegalArgumentException} if it isn't overriden (not a
+	 * {@link JSONString})
+	 * 
+	 * @param name An optional name to throw with the exception message
+	 * @return the value of the {@link JSONString}, no return otherwise
+	 */
+	public String getString(String name)
+	{
+		name = (name != null ? name : "value");
+		throw new IllegalArgumentException(name.concat(" was not a JSONString"));
+	}
+
+	/**
+	 * Method overriden by {@link JSONBoolean} and returning it's value, the method
+	 * throw an {@link IllegalArgumentException} if it isn't overriden (not a
+	 * {@link JSONBoolean})
+	 * 
+	 * @param name An optional name to throw with the exception message
+	 * @return the value of the {@link JSONBoolean}, no return otherwise
+	 */
+	public boolean getBoolean(String name)
+	{
+		name = (name != null ? name : "value");
+		throw new IllegalArgumentException(name.concat(" was not a JSONBoolean"));
+	}
+	
+	/**
+	 * Method overriden by {@link JSONArray} and returning itself, the method
+	 * throw an {@link IllegalArgumentException} if it isn't overriden (not a
+	 * {@link JSONArray})
+	 * 
+	 * @param name An optional name to throw with the exception message
+	 * @return the {@link JSONArray}, no return otherwise
+	 */
+	public JSONArray getArray(String name)
+	{
+		name = (name != null ? name : "value");
+		throw new IllegalArgumentException(name.concat(" was not a JSONArray"));
+	}
+	
+	/**
+	 * Method overriden by {@link JSONObject} and returning itself, the method
+	 * throw an {@link IllegalArgumentException} if it isn't overriden (not a
+	 * {@link JSONObject})
+	 * 
+	 * @param name An optional name to throw with the exception message
+	 * @return the {@link JSONObject}, no return otherwise
+	 */
+	public JSONObject getObject(String name)
+	{
+		name = (name != null ? name : "value");
+		throw new IllegalArgumentException(name.concat(" was not a JSONArray"));
+	}
 }

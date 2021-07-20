@@ -49,4 +49,9 @@ public final class JSONBoolean extends JSONValue
 	{
 		return value;
 	}
+	
+	public boolean getBoolean(String name)
+	{
+		return value;
+	}
 }

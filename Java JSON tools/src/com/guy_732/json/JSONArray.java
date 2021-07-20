@@ -73,4 +73,9 @@ public final class JSONArray extends JSONValue
 	{
 		return !array.contains(null);
 	}
+	
+	public JSONArray getArray(String name)
+	{
+		return this;
+	}
 }

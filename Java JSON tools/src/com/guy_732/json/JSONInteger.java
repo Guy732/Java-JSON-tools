@@ -55,5 +55,15 @@ public final class JSONInteger extends JSONValue
 	{
 		this.value = value;
 	}
+	
+	public long getInteger(String name)
+	{
+		return getValue();
+	}
+	
+	public double getNumber(String name)
+	{
+		return getValue();
+	}
 
 }

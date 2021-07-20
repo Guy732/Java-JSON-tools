@@ -152,4 +152,9 @@ public final class JSONObject extends JSONValue
 
 		return true;
 	}
+	
+	public JSONObject getObject(String name)
+	{
+		return this;
+	}
 }

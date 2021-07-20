@@ -50,6 +50,11 @@ public final class JSONString extends JSONValue
 	{
 		return value;
 	}
+	
+	public String getString(String name)
+	{
+		return value;
+	}
 
 	/**
 	 * Setter

@@ -55,4 +55,9 @@ public final class JSONNumber extends JSONValue
 	{
 		this.value = value;
 	}
+	
+	public double getNumber(String name)
+	{
+		return getValue();
+	}
 }
