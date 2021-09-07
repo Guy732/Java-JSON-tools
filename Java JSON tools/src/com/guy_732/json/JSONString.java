@@ -73,13 +73,4 @@ public final class JSONString extends JSONValue
 		value = newVal;
 	}
 
-	/**
-	 * Same as {@link JSONString#getString() JSONString::getString()}
-	 */
-	@Override
-	public String toString()
-	{
-		return value;
-	}
-
 }

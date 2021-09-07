@@ -1,6 +1,10 @@
 package com.guy_732.json;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayDeque;
+
+import com.guy_732.json.writer.JSONWriter;
 
 /**
  * class extended by all JSONValues (all listed in the enumeration
@@ -33,6 +37,22 @@ public abstract class JSONValue
 	public final boolean equals(Object ob)
 	{
 		return this == ob;
+	}
+	
+	@Override
+	public final String toString()
+	{
+		StringWriter out = new StringWriter();
+		try (JSONWriter writer = new JSONWriter(out))
+		{
+			writer.writeJSONValue(this);
+		}
+		catch (IOException e)
+		{
+			throw new RuntimeException(e);
+		}
+		
+		return out.toString();
 	}
 
 	/**
@@ -118,5 +138,25 @@ public abstract class JSONValue
 	{
 		name = (name != null ? name : "value");
 		throw new IllegalArgumentException(name.concat(" was not a JSONArray"));
+	}
+	
+	public static JSONValue valueOf(String s)
+	{
+		return ((s == null) ? JSONNull.Null : new JSONString(s));
+	}
+	
+	public static JSONInteger valueOf(long l)
+	{
+		return new JSONInteger(l);
+	}
+	
+	public static JSONNumber valueOf(double d)
+	{
+		return new JSONNumber(d);
+	}
+	
+	public static JSONBoolean valueOf(boolean b)
+	{
+		return (b ? JSONBoolean.True : JSONBoolean.False);
 	}
 }
