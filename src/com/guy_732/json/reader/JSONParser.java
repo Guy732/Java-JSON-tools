@@ -136,6 +136,8 @@ public class JSONParser implements Closeable {
 				return parseArray();
 			case '{':
 				return parseObject();
+			case '"':
+				return JSONValue.valueOf(tokenizer.sval);
 			default:
 				break;
 		}
