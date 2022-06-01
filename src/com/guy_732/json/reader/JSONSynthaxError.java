@@ -4,8 +4,7 @@ package com.guy_732.json.reader;
  * A {@link JSONSynthaxError} describes the kinds of syntax error a JSON parser
  * may encounter.
  */
-public enum JSONSynthaxError
-{
+public enum JSONSynthaxError {
 	/**
 	 * Describes an invalid document, where the initial character does not exist
 	 */
@@ -113,31 +112,28 @@ public enum JSONSynthaxError
 
 	private final String expectation;
 
-	private JSONSynthaxError(String description, String expectation)
-	{
+	JSONSynthaxError(String description, String expectation) {
 		this.description = description;
 		this.expectation = expectation;
 	}
 
 	/**
 	 * Returns a description of this {@link JSONSynthaxError}.
-	 * 
+	 *
 	 * @return A description of this {@link JSONSynthaxError}.
 	 */
-	public String getDescription()
-	{
+	public String getDescription() {
 		return description;
 	}
 
 	/**
 	 * Returns a description of an unfulfilled expectation, that caused this
 	 * {@link JSONSynthaxError}.
-	 * 
+	 *
 	 * @return a description of an unfulfilled expectation, that caused this
-	 *         {@link JSONSynthaxError}.
+	 * {@link JSONSynthaxError}.
 	 */
-	public String getExpectation()
-	{
+	public String getExpectation() {
 		return expectation;
 	}
 }

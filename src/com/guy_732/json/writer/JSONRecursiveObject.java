@@ -4,36 +4,30 @@ import com.guy_732.json.exception.JSONException;
 
 /**
  * Thrown when trying to write object containing itself
- * 
+ *
  * @author Guy_732
  */
-public class JSONRecursiveObject extends JSONException
-{
+public class JSONRecursiveObject extends JSONException {
 
 	private static final long serialVersionUID = 6513100252562741167L;
 
-	public JSONRecursiveObject()
-	{
+	public JSONRecursiveObject() {
 		super();
 	}
 
-	public JSONRecursiveObject(String message)
-	{
+	public JSONRecursiveObject(String message) {
 		super(message);
 	}
 
-	public JSONRecursiveObject(Throwable cause)
-	{
+	public JSONRecursiveObject(Throwable cause) {
 		super(cause);
 	}
 
-	public JSONRecursiveObject(String message, Throwable cause)
-	{
+	public JSONRecursiveObject(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	public JSONRecursiveObject(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace)
-	{
+	public JSONRecursiveObject(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 	}
 

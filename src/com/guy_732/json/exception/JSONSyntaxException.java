@@ -3,35 +3,29 @@ package com.guy_732.json.exception;
 import com.guy_732.json.reader.JSONSynthaxError;
 
 /**
- * Class thrown when a Parser cannot parse due to unknown Synthax
- * 
+ * Class thrown when a Parser cannot parse due to unknown Syntax
+ *
  * @author Guy_732
  */
-public class JSONSynthaxException extends JSONException
-{
+public class JSONSyntaxException extends JSONException {
 	private static final long serialVersionUID = -5679459782582941908L;
 
 	private final JSONSynthaxError error;
 
 	/**
 	 * Creates a new {@link JSONSynthaxError} for the given components.
-	 * 
+	 *
 	 * @param error The syntax error.
 	 */
-	public JSONSynthaxException(JSONSynthaxError error)
-	{
+	public JSONSyntaxException(JSONSynthaxError error) {
 		super(error.getDescription());
 		this.error = error;
 	}
 
 	@Override
-	public String getMessage()
-	{
-		StringBuilder s = new StringBuilder(error.getDescription());
-		s.append(" (");
-		s.append(error.getExpectation());
-		s.append(')');
-
-		return s.toString();
+	public String getMessage() {
+		return error.getDescription() + " (" +
+				error.getExpectation() +
+				')';
 	}
 }

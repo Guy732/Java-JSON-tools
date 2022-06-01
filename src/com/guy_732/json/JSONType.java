@@ -3,11 +3,10 @@ package com.guy_732.json;
 /**
  * Returned by the corresponding Objects implementing {@link JSONValue} when the
  * method {@link JSONValue#type() JSONValue::type()} is called.
- * 
+ *
  * @author Guy_732
  */
-public enum JSONType
-{
+public enum JSONType {
 	/**
 	 * For the type {@link JSONString}
 	 */
