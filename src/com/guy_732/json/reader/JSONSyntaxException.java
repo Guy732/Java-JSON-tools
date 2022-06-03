@@ -20,12 +20,25 @@ public class JSONSyntaxException extends JSONException {
 	 * @param error Description of the error
 	 * @param expected Describe what was expected
 	 *                 May be null
-	 * @param tokenizer The StreamTokenizer generating the error
+	 * @param tokenizer The StreamTokenizer generating the error, calling {@link StreamTokenizer#lineno()}
+	 *                  to get the location
 	 */
 	public JSONSyntaxException(String error, String expected, StreamTokenizer tokenizer) {
+		this(error, expected, tokenizer.lineno());
+	}
+
+	/**
+	 * Creates a new Syntax Exception
+	 *
+	 * @param error Description of the error
+	 * @param expected Describe what was expected
+	 *                 May be null
+	 * @param errorLine The line the error occurred on (in the input)
+	 */
+	public JSONSyntaxException(String error, String expected, int errorLine) {
 		super(error);
 		this.expected = expected;
-		this.line = tokenizer.lineno();
+		this.line = errorLine;
 	}
 
 	@Override

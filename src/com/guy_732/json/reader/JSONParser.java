@@ -1,19 +1,8 @@
 package com.guy_732.json.reader;
 
-import com.guy_732.json.JSONArray;
-import com.guy_732.json.JSONBoolean;
-import com.guy_732.json.JSONNull;
-import com.guy_732.json.JSONObject;
-import com.guy_732.json.JSONValue;
+import com.guy_732.json.*;
 
-import java.io.Closeable;
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StreamTokenizer;
-import java.io.StringReader;
+import java.io.*;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -41,26 +30,6 @@ public class JSONParser implements Closeable {
 		this.underlyingReader = Objects.requireNonNull(reader);
 		this.tokenizer = new StreamTokenizer(reader);
 		initializeTokenizer();
-	}
-
-	private void initializeTokenizer() {
-		final char[] allWhitespace = new char[] {' ', '\t', '\n', '\r'};
-		final char[] extraWordChars = new char[] {'+', '-', '.', 'E'};
-		StreamTokenizer t = tokenizer;
-		t.resetSyntax();
-		t.eolIsSignificant(false);
-
-		for (char c : allWhitespace)
-			t.whitespaceChars(c, c);
-
-		t.wordChars('a', 'z');
-		t.wordChars('0', '9');
-		for (char c : extraWordChars)
-			t.wordChars(c, c);
-
-		t.quoteChar('"');
-
-		supportCStyleComment(false);
 	}
 
 	/**
@@ -91,6 +60,26 @@ public class JSONParser implements Closeable {
 	 */
 	public JSONParser(char[] value) throws NullPointerException {
 		this(String.copyValueOf(value));
+	}
+
+	private void initializeTokenizer() {
+		final char[] allWhitespace = new char[]{' ', '\t', '\n', '\r'};
+		final char[] extraWordChars = new char[]{'+', '-', '.', 'E'};
+		StreamTokenizer t = tokenizer;
+		t.resetSyntax();
+		t.eolIsSignificant(false);
+
+		for (char c : allWhitespace)
+			t.whitespaceChars(c, c);
+
+		t.wordChars('a', 'z');
+		t.wordChars('0', '9');
+		for (char c : extraWordChars)
+			t.wordChars(c, c);
+
+		t.quoteChar('"');
+
+		supportCStyleComment(false);
 	}
 
 	@Override
@@ -150,11 +139,87 @@ public class JSONParser implements Closeable {
 	}
 
 	private JSONObject parseObject() throws IOException, JSONSyntaxException {
-		throw new RuntimeException("Method `parseObject()' not yet implemented");
+		JSONObject ob = new JSONObject();
+		boolean firstVal = true;
+		while (true) {
+			String key;
+			switch (tokenizer.nextToken()) {
+				case StreamTokenizer.TT_EOF:
+					throw new JSONSyntaxException("EOF reached while parsing a JSONObject", null, tokenizer);
+				case '}':
+					if (firstVal)
+						return ob;
+					throw new JSONSyntaxException("Unexpected token `}'",
+							"String expected after `,' token",
+							tokenizer);
+				case '"':
+					key = tokenizer.sval;
+					break;
+
+				case StreamTokenizer.TT_WORD:
+					throw new JSONSyntaxException(String.format("Unexpected `%s' token", tokenizer.sval),
+							"Awaiting `\"' (or `}' for empty objects)", tokenizer);
+
+				default:
+					throw new JSONSyntaxException(String.format("Unexpected token `%c'", tokenizer.ttype),
+							"Awaiting `\"' (or `}' for empty objects)", tokenizer);
+			}
+
+			firstVal = false;
+			if (ob.getJSONValue(key) != null)
+				throw new JSONSyntaxException(String.format("Duplicate key \"%s\" in JSONObject", key),
+						null, tokenizer);
+
+			if (tokenizer.nextToken() != ':') {
+				if (tokenizer.ttype == StreamTokenizer.TT_EOF)
+					throw new JSONSyntaxException("EOF reached while parsing a JSONObject", null, tokenizer);
+				throw new JSONSyntaxException(String.format("Unexpected token `%s'", getCurrentToken()),
+						"Expected token `:' after key in JSONObject", tokenizer);
+			}
+
+			ob.addValue(key, parseNextValue());
+			switch (tokenizer.nextToken()) {
+				case StreamTokenizer.TT_EOF:
+					throw new JSONSyntaxException("EOF reached while parsing a JSONObject", null, tokenizer);
+				case '}':
+					return ob;
+				case ',':
+					continue;
+				default:
+					throw new JSONSyntaxException(String.format("Unexpected token `%s'", getCurrentToken()),
+							"Expected `,' or `}'", tokenizer);
+			}
+		}
 	}
 
 	private JSONArray parseArray() throws IOException, JSONSyntaxException {
-		throw new RuntimeException("Method `parseArray()' not yet implemented");
+		JSONArray ob = new JSONArray();
+		boolean firstVal = true;
+		while (true) {
+			switch (tokenizer.nextToken()) {
+				case StreamTokenizer.TT_EOF:
+					throw new JSONSyntaxException("EOF reached while parsing a JSONArray", null, tokenizer);
+				case ']':
+					if (firstVal)
+						return ob;
+					throw new JSONSyntaxException("Unexpected token `]'",
+							"Expected a value after token `,'", tokenizer);
+			}
+			tokenizer.pushBack();
+			ob.getArray().add(parseNextValue());
+			firstVal = false;
+			switch (tokenizer.nextToken()) {
+				case StreamTokenizer.TT_EOF:
+					throw new JSONSyntaxException("EOF reached while parsing a JSONArray", null, tokenizer);
+				case ']':
+					return ob;
+				case ',':
+					continue;
+				default:
+					throw new JSONSyntaxException(String.format("Unexpected token `%s' in JSONArray", getCurrentToken()),
+							"Expected `,' or `]'", tokenizer);
+			}
+		}
 	}
 
 	private JSONValue parseWord() throws JSONSyntaxException {
@@ -182,5 +247,18 @@ public class JSONParser implements Closeable {
 		throw new JSONSyntaxException(err,
 				expectedTokens,
 				tokenizer);
+	}
+
+	private String getCurrentToken() {
+		switch (tokenizer.ttype) {
+			case StreamTokenizer.TT_EOF:
+				return null;
+			case StreamTokenizer.TT_WORD:
+				return tokenizer.sval;
+			case '"':
+				return String.format("\"%s\"", tokenizer.sval);
+			default:
+				return String.format("%c", tokenizer.ttype);
+		}
 	}
 }
