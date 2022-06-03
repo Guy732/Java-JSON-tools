@@ -2,14 +2,13 @@ package com.guy_732.json;
 
 /**
  * Represent a boolean
- * 
+ * <p>
  * Only 2 instances: {@link JSONBoolean#True JSONBoolean::True} &
  * {@link JSONBoolean#False JSONBoolean::False}
- * 
+ *
  * @author Guy_732
  */
-public final class JSONBoolean extends JSONValue
-{
+public final class JSONBoolean extends JSONValue {
 	/**
 	 * One of the 2 instances, represent true.
 	 */
@@ -24,34 +23,30 @@ public final class JSONBoolean extends JSONValue
 
 	/**
 	 * Create a new JSONBoolean storing a given boolean
-	 * 
+	 *
 	 * @param value The boolean to store
 	 */
-	private JSONBoolean(boolean value)
-	{
+	private JSONBoolean(boolean value) {
 		super();
 
 		this.value = value;
 	}
 
 	@Override
-	public JSONType type()
-	{
+	public JSONType type() {
 		return JSONType.JSONBoolean;
 	}
 
 	/**
 	 * Getter
-	 * 
+	 *
 	 * @return The boolean stored
 	 */
-	public boolean getValue()
-	{
+	public boolean getValue() {
 		return value;
 	}
-	
-	public boolean getBoolean(String name)
-	{
+
+	public boolean getBoolean(String name) {
 		return value;
 	}
 }

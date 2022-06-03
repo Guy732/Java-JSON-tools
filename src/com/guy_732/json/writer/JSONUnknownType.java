@@ -7,53 +7,44 @@ import com.guy_732.json.exception.JSONException;
 /**
  * Should never be thrown, but if {@link JSONValue#type() JSONValue::type()}
  * somehow return an unknown type, it will be thrown
- * 
+ *
  * @author Guy_732
  */
-public class JSONUnknownType extends JSONException
-{
+public class JSONUnknownType extends JSONException {
 	private static final long serialVersionUID = 7270320068228436883L;
 
 	private final JSONType type;
 
-	public JSONUnknownType()
-	{
+	public JSONUnknownType() {
 		type = null;
 	}
 
-	public JSONUnknownType(String message)
-	{
+	public JSONUnknownType(String message) {
 		super(message);
 		type = null;
 	}
 
-	public JSONUnknownType(Throwable cause)
-	{
+	public JSONUnknownType(Throwable cause) {
 		super(cause);
 		type = null;
 	}
 
-	public JSONUnknownType(String message, Throwable cause)
-	{
+	public JSONUnknownType(String message, Throwable cause) {
 		super(message, cause);
 		type = null;
 	}
 
-	public JSONUnknownType(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace)
-	{
+	public JSONUnknownType(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 		type = null;
 	}
 
-	public JSONUnknownType(JSONType type)
-	{
+	public JSONUnknownType(JSONType type) {
 		this.type = type;
 	}
 
-	public String getMessage()
-	{
-		if (type == null)
-		{
+	public String getMessage() {
+		if (type == null) {
 			return super.getMessage();
 		}
 

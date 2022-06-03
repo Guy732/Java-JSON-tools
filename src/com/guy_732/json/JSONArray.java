@@ -4,44 +4,38 @@ import java.util.ArrayList;
 
 /**
  * Represent an Array.
- * 
+ * <p>
  * To perform any add/remove actions on the array, do it on the ArrayList
  * returned by {@link JSONArray#getArray() JsonArray::getArray()}.
- * 
+ * <p>
  * Do not add null into the ArrayList, add {@link JSONNull#Null JSONNull::Null}
  * instead.
- * 
+ *
  * @author Guy_732
  */
-public final class JSONArray extends JSONValue
-{
+public final class JSONArray extends JSONValue {
 	private final ArrayList<JSONValue> array;
 
 	/**
 	 * Create a new empty JSONArray
 	 */
-	public JSONArray()
-	{
+	public JSONArray() {
 		this(null);
 	}
 
 	/**
 	 * Create a new JSONArray from a given array
-	 * 
+	 *
 	 * @param array if null, will create a new ArrayList.
-	 * 
 	 * @throws NullPointerException if the array contains null
 	 */
-	public JSONArray(ArrayList<JSONValue> array) throws NullPointerException
-	{
+	public JSONArray(ArrayList<JSONValue> array) throws NullPointerException {
 		super();
-		if (array == null)
-		{
+		if (array == null) {
 			array = new ArrayList<>();
 		}
 
-		if (array.contains(null))
-		{
+		if (array.contains(null)) {
 			new NullPointerException("JSONArray cannot contain null.");
 		}
 
@@ -49,33 +43,29 @@ public final class JSONArray extends JSONValue
 	}
 
 	@Override
-	public JSONType type()
-	{
+	public JSONType type() {
 		return JSONType.JSONArray;
 	}
 
 	/**
 	 * Getter
-	 * 
+	 *
 	 * @return The ArrayList used to represent the JSONArray in Java
 	 */
-	public ArrayList<JSONValue> getArray()
-	{
+	public ArrayList<JSONValue> getArray() {
 		return array;
 	}
 
 	/**
 	 * Check
-	 * 
+	 *
 	 * @return true if the Array is valid, false otherwise (cannot contain null).
 	 */
-	public boolean checkArray()
-	{
+	public boolean checkArray() {
 		return !array.contains(null);
 	}
-	
-	public JSONArray getArray(String name)
-	{
+
+	public JSONArray getArray(String name) {
 		return this;
 	}
 }
