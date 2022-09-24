@@ -74,7 +74,7 @@ public class JSONWriter implements Closeable {
 		JSONType t = v.type();
 		switch (t) {
 			case JSONNull:
-				assert v instanceof JSONNull : "type() returned JSONNull but the value isn't a JSONnull object";
+				assert v instanceof JSONNull : "type() returned JSONNull but the value isn't a JSONNull object";
 				writer.write("null");
 				break;
 
