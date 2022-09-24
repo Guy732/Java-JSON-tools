@@ -1,5 +1,6 @@
 package com.guy_732.json;
 
+import com.guy_732.json.reader.JSONParser;
 import com.guy_732.json.writer.JSONWriter;
 
 import java.io.IOException;
@@ -142,5 +143,13 @@ public abstract class JSONValue {
 
 	public static JSONBoolean valueOf(boolean b) {
 		return (b ? JSONBoolean.True : JSONBoolean.False);
+	}
+
+	public static JSONValue parseString(String jsonString) {
+		try (JSONParser parser = new JSONParser(jsonString)) {
+			return parser.parse();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }
