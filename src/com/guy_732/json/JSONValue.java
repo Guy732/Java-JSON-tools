@@ -1,5 +1,6 @@
 package com.guy_732.json;
 
+import com.guy_732.json.reader.JSONParser;
 import com.guy_732.json.writer.JSONWriter;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ import java.util.ArrayDeque;
  */
 public abstract class JSONValue {
 	/**
-	 * Note: you can also use {@code isinstance} however with this method, you can
+	 * Note: you can also use {@code instanceof} however with this method, you can
 	 * use switch case statements.
 	 *
 	 * @return The {@link JSONType} of the JSONValue
@@ -50,7 +51,7 @@ public abstract class JSONValue {
 	}
 
 	/**
-	 * Method overriden by {@link JSONInteger} and returning it's value, the method
+	 * Method overriden by {@link JSONInteger} and returning its value, the method
 	 * throw an {@link IllegalArgumentException} if it isn't overriden (not a
 	 * {@link JSONInteger})
 	 *
@@ -64,7 +65,7 @@ public abstract class JSONValue {
 
 	/**
 	 * Method overriden by {@link JSONInteger} and {@link JSONNumber} and returning
-	 * it's value, the method throw an {@link IllegalArgumentException} if it isn't
+	 * its value, the method throw an {@link IllegalArgumentException} if it isn't
 	 * overriden (not a {@link JSONInteger} nor {@link JSONNumber}
 	 *
 	 * @param name An optional name to throw with the exception message
@@ -77,7 +78,7 @@ public abstract class JSONValue {
 	}
 
 	/**
-	 * Method overriden by {@link JSONString} and returning it's value, the method
+	 * Method overriden by {@link JSONString} and returning its value, the method
 	 * throw an {@link IllegalArgumentException} if it isn't overriden (not a
 	 * {@link JSONString})
 	 *
@@ -90,7 +91,7 @@ public abstract class JSONValue {
 	}
 
 	/**
-	 * Method overriden by {@link JSONBoolean} and returning it's value, the method
+	 * Method overriden by {@link JSONBoolean} and returning its value, the method
 	 * throw an {@link IllegalArgumentException} if it isn't overriden (not a
 	 * {@link JSONBoolean})
 	 *
@@ -142,5 +143,13 @@ public abstract class JSONValue {
 
 	public static JSONBoolean valueOf(boolean b) {
 		return (b ? JSONBoolean.True : JSONBoolean.False);
+	}
+
+	public static JSONValue parseString(String jsonString) {
+		try (JSONParser parser = new JSONParser(jsonString)) {
+			return parser.parse();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

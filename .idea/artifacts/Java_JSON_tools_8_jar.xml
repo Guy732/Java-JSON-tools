@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="Java-JSON-tools-8:jar">
+    <output-path>$PROJECT_DIR$/classes/artifacts/Java_JSON_tools_8_jar</output-path>
+    <root id="archive" name="Java-JSON-tools.jar">
+      <element id="module-output" name="Java-JSON-tools" />
+    </root>
+  </artifact>
+</component>
